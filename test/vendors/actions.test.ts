@@ -20,7 +20,7 @@ describe.skipIf(!hasTestDb)("vendor actions", { timeout: 60_000 }, () => {
 
   beforeAll(async () => {
     const t = await createTestHome();
-    homeRef.scope = t.scope as any;
+    homeRef.scope = t.scope as { homeId: string; today: string };
     cleanup = async () => { await t.cleanup(); };
   });
 
