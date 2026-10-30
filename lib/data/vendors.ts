@@ -5,7 +5,7 @@ import { logEntry, vendor, type Vendor } from "@/lib/db/schema";
 import { VENDOR_TRADES, type VendorTrade } from "@/lib/domain/constants";
 import { formatMonthYear } from "@/lib/domain/dates";
 import { type LogRow, selectLog } from "./log";
-import { currentScope, type HomeScope, likePattern } from "./scope";
+import { currentScope, type HomeScope, likePattern, isUuid } from "./scope";
 
 export type VendorRow = Vendor & {
   /** Date of the latest log entry with this vendor, or null. */
@@ -83,6 +83,7 @@ export async function getVendor(id: string) {
 }
 
 export async function getVendorFor(scope: HomeScope, id: string): Promise<VendorDetail | null> {
+  if (!isUuid(id)) return null;
   const [row] = await selectVendors(scope.homeId)
     .where(and(eq(vendor.id, id), eq(vendor.homeId, scope.homeId)))
     .limit(1);

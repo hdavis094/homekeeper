@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { item, logEntry, task, type Task, vendor } from "@/lib/db/schema";
 import { TASK_STATUSES, type TaskStatus } from "@/lib/domain/constants";
 import { dueText, sortTasks, taskStatus } from "@/lib/domain/tasks";
-import { currentScope, type HomeScope, likePattern } from "./scope";
+import { currentScope, type HomeScope, likePattern, isUuid } from "./scope";
 
 export type TaskRow = Task & {
   status: TaskStatus;
@@ -86,6 +86,7 @@ export async function getTask(id: string) {
 }
 
 export async function getTaskFor(scope: HomeScope, id: string): Promise<TaskRow | null> {
+  if (!isUuid(id)) return null;
   const [row] = await selectTasks()
     .where(and(eq(task.id, id), eq(task.homeId, scope.homeId)))
     .limit(1);

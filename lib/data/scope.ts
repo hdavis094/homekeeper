@@ -17,6 +17,13 @@ export async function currentScope(): Promise<HomeScope> {
   return { homeId: home.id, today };
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** True for a well-formed UUID. Ids come from URL params; Postgres throws on malformed uuids. */
+export function isUuid(id: string): boolean {
+  return UUID_RE.test(id);
+}
+
 /** Escapes `%`, `_` and `\` for ILIKE, and wraps in wildcards. */
 export function likePattern(q: string): string {
   return `%${q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;

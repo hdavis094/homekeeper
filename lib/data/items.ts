@@ -5,7 +5,7 @@ import { item, type Item, logEntry, task } from "@/lib/db/schema";
 import { ITEM_CATEGORIES, type ItemCategory } from "@/lib/domain/constants";
 import { sortTasks } from "@/lib/domain/tasks";
 import { type LogRow, selectLog } from "./log";
-import { currentScope, type HomeScope } from "./scope";
+import { currentScope, type HomeScope, isUuid } from "./scope";
 import { selectTasks, type TaskRow, toTaskRow } from "./tasks";
 
 export type ItemCounts = Record<"all" | ItemCategory, number>;
@@ -43,6 +43,7 @@ export async function getItem(id: string) {
 }
 
 export async function getItemFor(scope: HomeScope, id: string): Promise<ItemDetail | null> {
+  if (!isUuid(id)) return null;
   const [row] = await db
     .select()
     .from(item)
