@@ -76,39 +76,31 @@ export default async function VendorsPage({
               <div className="flex items-start gap-3">
                 <Avatar name={v.name} size="md" tone="ink" />
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-[15px] font-bold text-ink truncate">{v.name}</h3>
+                  <Link
+                    href={`/vendors?edit=${v.id}`}
+                    className="block text-[15px] font-bold text-ink truncate hover:text-primary"
+                    title={`Edit ${v.name}`}
+                  >
+                    {v.name}
+                  </Link>
                   <div className="mt-1">
                     <StatusPill tone={v.trade}>{VENDOR_TRADE_LABELS[v.trade]}</StatusPill>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 text-[13px] text-muted">
-                <Star className="w-3.5 h-3.5 text-[#D97706] fill-[#D97706]" />
-                <span className="font-medium text-ink">
-                  {v.rating !== null ? v.rating.toFixed(1) : "—"}
-                </span>
-                <span>rating</span>
+              <div className="flex items-center gap-1.5 text-[13px] text-ink">
+                <Star className="w-3.5 h-3.5 text-[#D97706] fill-[#D97706]" aria-hidden />
+                <span>{v.rating !== null ? `${v.rating.toFixed(1)} rating` : "No rating"}</span>
               </div>
 
-              {v.phone && (
-                <p className="text-[13px] text-muted truncate">{v.phone}</p>
-              )}
-              {v.email && (
-                <p className="text-[13px] text-muted truncate">{v.email}</p>
-              )}
+              <div className="border border-divider rounded-[8px] px-3 py-2 text-[13px] text-muted space-y-1">
+                <p className="truncate">{v.phone || v.email || "No contact info"}</p>
+                <p>{v.lastHiredText}</p>
+              </div>
 
-              <p className="text-[12px] text-muted-2">{v.lastHiredText}</p>
-
-              <div className="mt-auto flex items-center gap-2">
+              <div className="mt-auto">
                 <Menu phone={v.phone} email={v.email} label="Contact" />
-                <Link
-                  href={`/vendors?edit=${v.id}`}
-                  className="h-9 px-3 rounded-[8px] border border-border text-[13px] font-semibold text-ink hover:bg-gray-50 inline-flex items-center"
-                >
-                  Edit
-                </Link>
-                <DeleteVendorButton id={v.id} />
               </div>
             </Card>
           ))}
@@ -140,6 +132,10 @@ export default async function VendorsPage({
               notes: editing.notes ?? "",
             }}
           />
+          <div className="mt-4 border-t border-divider pt-4 flex items-center justify-between gap-3">
+            <p className="text-[13px] text-muted">Remove this vendor. Past work stays in your history.</p>
+            <DeleteVendorButton id={editing.id} />
+          </div>
         </Modal>
       )}
     </div>

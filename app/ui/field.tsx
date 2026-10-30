@@ -25,18 +25,27 @@ export function Field({
 }: FieldProps) {
   const errorText = Array.isArray(error) ? error[0] : error;
 
+  const labelText = label && (
+    <span className="text-[13px] font-medium text-ink">
+      {label}
+      {required && <span className="text-[#DC2626] ml-0.5">*</span>}
+    </span>
+  );
+
   return (
     <div className={clsx("flex flex-col gap-1.5", className)}>
-      {label && (
-        <label
-          htmlFor={htmlFor}
-          className="text-[13px] font-medium text-ink"
-        >
-          {label}
-          {required && <span className="text-[#DC2626] ml-0.5">*</span>}
+      {/* Without htmlFor, wrap the control so the label is associated implicitly. */}
+      {htmlFor ? (
+        <>
+          {label && <label htmlFor={htmlFor}>{labelText}</label>}
+          {children}
+        </>
+      ) : (
+        <label className="flex flex-col gap-1.5">
+          {labelText}
+          {children}
         </label>
       )}
-      {children}
       {hint && !errorText && (
         <p className="text-[12px] text-muted">{hint}</p>
       )}

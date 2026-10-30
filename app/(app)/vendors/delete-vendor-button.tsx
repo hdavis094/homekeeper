@@ -18,7 +18,7 @@ export function DeleteVendorButton({ id }: { id: string }) {
         if (!window.confirm("Delete this vendor? This cannot be undone.")) return;
         startTransition(async () => {
           await deleteVendor(id);
-          router.refresh();
+          router.push("/vendors", { scroll: false });
         });
       }}
     >
