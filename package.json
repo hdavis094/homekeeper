@@ -16,6 +16,7 @@
     "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.13",
     "@neondatabase/serverless": "^1.2.0",
     "@react-email/components": "^1.0.12",
     "@vercel/blob": "^2.8.2",

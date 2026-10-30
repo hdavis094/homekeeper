@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Local-only in-process Postgres; loads its WASM from node_modules at runtime.
+  serverExternalPackages: ["@electric-sql/pglite"],
 };
 
 export default nextConfig;
