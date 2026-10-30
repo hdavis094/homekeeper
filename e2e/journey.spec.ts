@@ -19,6 +19,8 @@ test("journey", async ({ page }) => {
   await page.getByLabel("Confirm password").fill(password);
   await page.getByRole("button", { name: "Create free account" }).click();
   await expect(page).toHaveURL(/\/home/);
+  // The URL changes before the action response (with the session cookie) has finished.
+  await expect(page.getByRole("heading", { name: /Welcome back/ })).toBeVisible();
 
   // add item
   await page.goto("/inventory?new=1");

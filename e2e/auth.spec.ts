@@ -9,6 +9,8 @@ test("sign up fresh user lands on /home", async ({ page }) => {
   await page.getByLabel("Confirm password").fill("password123");
   await page.getByRole("button", { name: "Create free account" }).click();
   await expect(page).toHaveURL(/\/home/);
+  // The URL changes before the action response (with the session cookie) has finished.
+  await expect(page.getByRole("heading", { name: /Welcome back/ })).toBeVisible();
 });
 
 test("sign out then sign in", async ({ page }) => {
@@ -20,6 +22,8 @@ test("sign out then sign in", async ({ page }) => {
   await page.getByLabel("Confirm password").fill("password123");
   await page.getByRole("button", { name: "Create free account" }).click();
   await expect(page).toHaveURL(/\/home/);
+  // The URL changes before the action response (with the session cookie) has finished.
+  await expect(page.getByRole("heading", { name: /Welcome back/ })).toBeVisible();
 
   // sign out (mobile needs menu toggle first)
   const menuToggle = page.getByRole("button", { name: "Toggle navigation menu" });
@@ -33,6 +37,8 @@ test("sign out then sign in", async ({ page }) => {
   await page.getByLabel("Password", { exact: true }).fill("password123");
   await page.getByRole("button", { name: "Log In" }).click();
   await expect(page).toHaveURL(/\/home/);
+  // The URL changes before the action response (with the session cookie) has finished.
+  await expect(page.getByRole("heading", { name: /Welcome back/ })).toBeVisible();
 });
 
 test("signed-out /tasks redirects to /", async ({ page }) => {

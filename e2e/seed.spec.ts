@@ -6,6 +6,8 @@ async function signInSeed(page: Page) {
   await page.getByLabel("Password", { exact: true }).fill("homekeeper-demo");
   await page.getByRole("button", { name: "Log In" }).click();
   await expect(page).toHaveURL(/\/home/);
+  // The URL changes before the action response (with the session cookie) has finished.
+  await expect(page.getByRole("heading", { name: /Welcome back/ })).toBeVisible();
 }
 
 test("seed tasks chip counts", async ({ page }) => {
