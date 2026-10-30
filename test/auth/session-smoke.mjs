@@ -37,5 +37,5 @@ const page = await request("/?expired=1");
 assert.equal(page.headers.get("location"), "/home", "Server component should resolve the same signed-in session");
 console.log("PASS: API and server component resolve the same session");
 await request("/api/auth/sign-out", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
-assert.equal((await request("/tasks")).headers.get("location"), `${base}/`);
+assert.equal(new URL((await request("/tasks")).headers.get("location"), base).href, `${base}/`);
 console.log("PASS: signed-out /tasks redirects to /");
