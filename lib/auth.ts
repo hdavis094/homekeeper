@@ -16,6 +16,10 @@ const escapeHtml = (s: string) =>
  */
 export const auth = betterAuth({
   appName: "HomeKeeper",
+  // BETTER_AUTH_URL is the canonical origin; also accept this deployment's own Vercel URLs (previews).
+  trustedOrigins: [process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL]
+    .filter((host): host is string => Boolean(host))
+    .map((host) => `https://${host}`),
   database: drizzleAdapter(db, { provider: "pg", schema }),
   emailAndPassword: {
     enabled: true,
