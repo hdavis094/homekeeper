@@ -22,7 +22,15 @@ function createPgliteDb(url: string): Db {
   const { drizzle: drizzlePglite } = require("drizzle-orm/pglite") as typeof import("drizzle-orm/pglite");
   /* eslint-enable @typescript-eslint/no-require-imports */
   const target = url.slice(PGLITE_PREFIX.length);
-  const client = target === "memory" ? new PGlite() : new PGlite(target);
+  // Next loads this module once per bundle layer (RSC, actions, route handlers). Separate PGlite
+  // instances on one directory don't see each other's writes, so share one client per process.
+  const clients = ((globalThis as { __pgliteClients?: Map<string, InstanceType<typeof PGlite>> })
+    .__pgliteClients ??= new Map());
+  let client = target === "memory" ? undefined : clients.get(target);
+  if (!client) {
+    client = target === "memory" ? new PGlite() : new PGlite(target);
+    if (target !== "memory") clients.set(target, client);
+  }
   const local = drizzlePglite({ client, schema });
   // Same query API as neon-http. PGlite has no `batch`; run the queries in order instead
   // (not atomic, which is fine for local development).
