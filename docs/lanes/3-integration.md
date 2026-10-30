@@ -30,3 +30,6 @@ Prefer role/label locators. Run against local dev and against the Vercel preview
   and use per-category icons instead of the generic wrench.
 - Vendor cards: `vendors.png` shows phone + last hired in a bordered block and a full-width Contact button;
   Edit/Delete were added (needed), consider moving them into a "⋯" menu to keep the card clean.
+- `Button`: a `className` text color can lose to the variant's own color (ghost grey beat red on Tasks' Delete).
+  Add a `danger-ghost` variant (or class merging) and switch Tasks' plain Delete button to it.
+- Tasks: overdue rows sort most-overdue first (domain `sortTasks`); `tasks.png` shows the reverse. Decide which wins.
