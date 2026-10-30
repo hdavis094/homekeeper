@@ -1,0 +1,92 @@
+[
+  {
+    "check": "missing secret",
+    "status": 401,
+    "body": {
+      "error": "Unauthorized"
+    }
+  },
+  {
+    "check": "wrong secret",
+    "status": 401,
+    "body": {
+      "error": "Unauthorized"
+    }
+  },
+  {
+    "check": "dry run",
+    "status": 200,
+    "body": {
+      "dryRun": true,
+      "counts": {
+        "homesChecked": 1,
+        "reminderEmails": 1,
+        "reminderTasks": 3,
+        "weeklySummaries": 0,
+        "sentEmails": 0,
+        "skippedEmails": 0,
+        "failedEmails": 0
+      },
+      "deliveries": [
+        {
+          "homeId": "baa7651c-6d0d-438c-ad7c-d8b9e86217cc",
+          "email": "alex.morgan@email.com",
+          "today": "2026-10-29",
+          "tasks": [
+            {
+              "id": "5c44d1a7-b559-48d5-b9c3-20ff09d53cbb",
+              "title": "Inspect Sump Pump",
+              "dueDate": "2026-10-24",
+              "dueText": "Overdue by 5 days"
+            },
+            {
+              "id": "2772ca93-89ef-4fbd-b5ea-b51531fe6347",
+              "title": "Flush Water Heater",
+              "dueDate": "2026-10-27",
+              "dueText": "Overdue by 2 days"
+            },
+            {
+              "id": "29512339-9708-45c9-8119-0ed86a3307c9",
+              "title": "Replace HVAC Filter",
+              "dueDate": "2026-11-01",
+              "dueText": "Due in 3 days"
+            }
+          ],
+          "weeklySummary": null
+        }
+      ]
+    }
+  },
+  {
+    "check": "logged local delivery",
+    "status": 200,
+    "body": {
+      "dryRun": false,
+      "counts": {
+        "homesChecked": 1,
+        "reminderEmails": 1,
+        "reminderTasks": 3,
+        "weeklySummaries": 0,
+        "sentEmails": 0,
+        "skippedEmails": 1,
+        "failedEmails": 0
+      }
+    }
+  },
+  {
+    "check": "same-day repeat",
+    "status": 200,
+    "body": {
+      "dryRun": false,
+      "counts": {
+        "homesChecked": 1,
+        "reminderEmails": 0,
+        "reminderTasks": 0,
+        "weeklySummaries": 0,
+        "sentEmails": 0,
+        "skippedEmails": 0,
+        "failedEmails": 0
+      }
+    }
+  }
+]
