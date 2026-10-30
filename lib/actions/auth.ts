@@ -74,6 +74,9 @@ export async function resetPassword(_previous: AuthFormState, form: FormData): P
       body: { token: parsed.data.token, newPassword: parsed.data.password },
       headers: await headers(),
     });
+    // Reset revokes sessions in the database; also clear the browser's stale cookie
+    // so the optimistic proxy lets the success notice reach the login page.
+    await auth.api.signOut({ headers: await headers() });
   } catch (error) {
     return { formError: error instanceof APIError && error.body?.code === "INVALID_TOKEN"
       ? "This reset link is invalid or has expired. Request a new link."
