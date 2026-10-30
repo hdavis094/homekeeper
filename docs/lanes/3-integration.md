@@ -24,3 +24,9 @@ Playwright suite (`npm run e2e`, desktop 1440 + mobile 390 projects already conf
 Prefer role/label locators. Run against local dev and against the Vercel preview (`PLAYWRIGHT_BASE_URL`).
 
 **Done when:** suite green on both projects locally and against the preview.
+
+## Visual pass backlog (collected during Wave 2 reviews)
+- Inventory cards: match `inventory.png` stacking (icon tile on top, name, model, footer row "Installed YYYY" + pill),
+  and use per-category icons instead of the generic wrench.
+- Vendor cards: `vendors.png` shows phone + last hired in a bordered block and a full-width Contact button;
+  Edit/Delete were added (needed), consider moving them into a "⋯" menu to keep the card clean.
