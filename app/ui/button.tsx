@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import clsx from "clsx";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "danger-ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps
@@ -23,6 +23,8 @@ const variantClasses: Record<ButtonVariant, string> = {
     "bg-transparent text-muted border border-transparent hover:bg-gray-100 hover:text-ink focus-visible:ring-primary",
   danger:
     "bg-card text-[#DC2626] border border-[#DC2626] hover:bg-[#FEE2E2]/50 focus-visible:ring-[#DC2626]",
+  "danger-ghost":
+    "bg-transparent text-[#DC2626] border border-transparent hover:bg-[#FEE2E2]/60 focus-visible:ring-[#DC2626]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

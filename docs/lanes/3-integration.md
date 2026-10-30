@@ -25,11 +25,12 @@ Prefer role/label locators. Run against local dev and against the Vercel preview
 
 **Done when:** suite green on both projects locally and against the preview.
 
-## Visual pass backlog (collected during Wave 2 reviews)
-- Inventory cards: match `inventory.png` stacking (icon tile on top, name, model, footer row "Installed YYYY" + pill),
-  and use per-category icons instead of the generic wrench.
-- Vendor cards: `vendors.png` shows phone + last hired in a bordered block and a full-width Contact button;
-  Edit/Delete were added (needed), consider moving them into a "⋯" menu to keep the card clean.
-- `Button`: a `className` text color can lose to the variant's own color (ghost grey beat red on Tasks' Delete).
-  Add a `danger-ghost` variant (or class merging) and switch Tasks' plain Delete button to it.
-- Tasks: overdue rows sort most-overdue first (domain `sortTasks`); `tasks.png` shows the reverse. Decide which wins.
+## Visual pass backlog (collected during Wave 2 reviews) — resolved
+- [x] Inventory cards: stacked layout matching `inventory.png`, per-category icons.
+- [x] Vendor cards: phone + last hired block and full-width Contact menu; Edit opens from the vendor name and
+  Delete lives inside the edit modal.
+- [x] `Button`: `danger-ghost` variant; used by Tasks' Delete and Settings' remove-photo.
+- [x] Tasks overdue order: kept most-overdue first (domain `sortTasks`, covered by tests) over `tasks.png`, since
+  the oldest miss is the most urgent. Flip in `lib/domain` if the design order is preferred.
+- [x] Field labels now associate with their controls (implicit `<label>` wrap), so every modal input has an
+  accessible name.

@@ -88,7 +88,7 @@ function Photo({ user }: { user: Profile }) {
         <input ref={input} type="file" accept={UPLOAD_ACCEPT.avatars} aria-label="Profile photo" className="sr-only" disabled={pending}
           onChange={(event) => { uploadPhoto(event.target.files?.[0]); event.target.value = ""; }} />
         <Button variant="secondary" size="sm" disabled={pending} onClick={() => input.current?.click()}>{pending ? "Updating photo…" : "Upload new photo"}</Button>
-        <Button variant="ghost" size="sm" className="text-danger" disabled={pending || !user.image}
+        <Button variant="danger-ghost" size="sm" disabled={pending || !user.image}
           onClick={() => startTransition(async () => { setState(await removeAvatar()); })}>Remove</Button>
       </div>
       <Feedback state={state} />

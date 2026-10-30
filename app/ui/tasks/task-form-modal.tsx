@@ -69,15 +69,15 @@ export function TaskFormModal({
   ) : (
     <>
       {editing && (
-        <button
-          type="button"
+        <Button
+          variant="danger-ghost"
           onClick={() => setConfirmingDelete(true)}
           disabled={busy}
-          className="mr-auto inline-flex items-center gap-1.5 h-9 px-2 rounded-[8px] text-[14px] font-semibold text-[#DC2626] hover:bg-[#FEE2E2]/60 transition-colors cursor-pointer disabled:opacity-50"
+          className="mr-auto"
         >
           <Trash2 aria-hidden="true" className="w-4 h-4" />
           Delete
-        </button>
+        </Button>
       )}
       {editing && completeHref && !task.completed && (
         <Button variant="secondary" href={completeHref}>

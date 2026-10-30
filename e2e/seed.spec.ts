@@ -1,6 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
-async function signInSeed(page: any) {
+async function signInSeed(page: Page) {
   await page.goto("/#login");
   await page.getByLabel("Email").fill("alex.morgan@email.com");
   await page.getByLabel("Password", { exact: true }).fill("homekeeper-demo");
