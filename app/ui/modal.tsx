@@ -85,7 +85,6 @@ function ModalInner({
   return (
     <dialog
       ref={dialogRef}
-      open
       aria-label={typeof title === "string" ? title : undefined}
       onCancel={(e) => {
         e.preventDefault();

@@ -14,5 +14,7 @@ export default defineConfig({
     include: ["test/**/*.test.ts", "lib/**/*.test.ts"],
     setupFiles: ["test/setup-db.ts"],
     passWithNoTests: true,
+    // PGlite boot + migrations can be slow under load (e.g. right after `next build`).
+    hookTimeout: 30_000,
   },
 });
