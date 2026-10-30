@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F3F4F6;
+  --foreground: #111827;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: #111827;
+  --color-sidebar: #111827;
+  --color-sidebar-active: #1F2937;
+  --color-bg: #F3F4F6;
+  --color-card: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-divider: #F0F1F3;
+  --color-muted: #6B7280;
+  --color-muted-2: #9CA3AF;
+  --color-primary: #2563EB;
+
+  --color-overdue-fg: #DC2626;
+  --color-overdue-bg: #FEE2E2;
+  --color-due-soon-fg: #D97706;
+  --color-due-soon-bg: #FEF3C7;
+  --color-scheduled-fg: #2563EB;
+  --color-scheduled-bg: #DBEAFE;
+  --color-completed-fg: #16A34A;
+  --color-completed-bg: #DCFCE7;
+  --color-danger: #DC2626;
+  --color-danger-bg: #FEE2E2;
+
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-pill: 20px;
+  --radius-tile: 8px;
+
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
 }
