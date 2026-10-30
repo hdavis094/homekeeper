@@ -13,6 +13,12 @@ const passwordsMatch = {
   },
 };
 
+function withoutConfirmation<T extends { confirmPassword: string }>(v: T): Omit<T, "confirmPassword"> {
+  const rest: Partial<T> = { ...v };
+  delete rest.confirmPassword;
+  return rest as Omit<T, "confirmPassword">;
+}
+
 export const signUpSchema = z
   .object({
     name: requiredText("Name", 80),
@@ -21,7 +27,7 @@ export const signUpSchema = z
     confirmPassword: z.string({ error: "Confirm your password" }),
   })
   .refine((v) => v.password === v.confirmPassword, passwordsMatch)
-  .transform(({ confirmPassword: _, ...rest }) => rest);
+  .transform(withoutConfirmation);
 export type SignUpInput = z.output<typeof signUpSchema>;
 
 export const signInSchema = z.object({
@@ -41,5 +47,5 @@ export const resetPasswordSchema = z
     confirmPassword: z.string({ error: "Confirm your password" }),
   })
   .refine((v) => v.password === v.confirmPassword, passwordsMatch)
-  .transform(({ confirmPassword: _, ...rest }) => rest);
+  .transform(withoutConfirmation);
 export type ResetPasswordInput = z.output<typeof resetPasswordSchema>;
