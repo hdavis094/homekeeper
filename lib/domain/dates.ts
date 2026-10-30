@@ -22,12 +22,7 @@ export function isValidDateString(value: string): boolean {
 
 /** Today's calendar date in `timeZone` (unknown zones fall back to America/New_York). */
 export function todayIn(timeZone: string, now: Date = new Date()): string {
-  let zone = timeZone;
-  try {
-    new Intl.DateTimeFormat("en-US", { timeZone: zone });
-  } catch {
-    zone = DEFAULT_TIME_ZONE;
-  }
+  const zone = isValidTimeZone(timeZone) ? timeZone : DEFAULT_TIME_ZONE;
   // en-CA formats as YYYY-MM-DD.
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: zone,
@@ -75,4 +70,13 @@ export function formatShortDate(date: string, today?: string): string {
 /** "Jan 2026" */
 export function formatMonthYear(date: string): string {
   return toUtc(date).toLocaleDateString("en-US", { timeZone: "UTC", month: "short", year: "numeric" });
+}
+
+export function isValidTimeZone(timeZone: string): boolean {
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone });
+    return true;
+  } catch {
+    return false;
+  }
 }
