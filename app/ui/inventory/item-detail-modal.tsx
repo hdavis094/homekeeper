@@ -17,7 +17,7 @@ export function ItemDetailModal({ detail }: { detail: ItemDetail }) {
   const router = useRouter();
   const { item, tasks, log, totalCostCents } = detail;
 
-  const submit = async (_prev: unknown, fd: FormData) => deleteItem(item.id);
+  const submit = async () => deleteItem(item.id);
   const [state, formAction, pending] = useActionState(submit, null);
 
   useEffect(() => {

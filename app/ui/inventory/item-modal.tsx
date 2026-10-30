@@ -3,7 +3,7 @@
 import React, { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Modal, Field, Input, Select, Textarea, Button, FormError } from "@/app/ui";
-import { createItem, updateItem, type InventoryActionResult } from "@/lib/actions/inventory";
+import { createItem, updateItem } from "@/lib/actions/inventory";
 import { ITEM_CATEGORIES, ITEM_CATEGORY_LABELS, ITEM_CONDITIONS, ITEM_CONDITION_LABELS } from "@/lib/domain/constants";
 import type { Item } from "@/lib/db/schema";
 
