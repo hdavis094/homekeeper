@@ -67,12 +67,12 @@ export async function changePassword(_previous: SettingsState, form: FormData): 
   try {
     await auth.api.changePassword({
       headers: await headers(),
-      body: { ...parsed.data, revokeOtherSessions: true },
+      body: parsed.data,
     });
   } catch {
     return { success: false, message: "We couldn't update your password. Check your current password and try again." };
   }
-  return saved("Password updated. Other sessions have been signed out.");
+  return saved("Password updated.");
 }
 
 const avatarSchema = z.object({
@@ -98,7 +98,7 @@ export async function updateAvatar(_previous: SettingsState, form: FormData): Pr
   return saved("Profile photo updated.");
 }
 
-export async function removeAvatar(_previous: SettingsState): Promise<SettingsState> {
+export async function removeAvatar(): Promise<SettingsState> {
   const { user } = await requireSession();
   try {
     await auth.api.updateUser({ headers: await headers(), body: { image: null } });

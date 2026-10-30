@@ -70,6 +70,7 @@ describe("settings actions against in-memory Postgres", { timeout: 60_000 }, () 
     const wrong = await changePassword({}, form({ currentPassword: "incorrect", newPassword: "new-password-456" }));
     expect(wrong).toMatchObject({ success: false });
     expect((await changePassword({}, form({ currentPassword: "test-password-123", newPassword: "new-password-456" }))).success).toBe(true);
+    expect(await auth.api.getSession({ headers: request.headers })).not.toBeNull();
     await expect(signInHeaders(owner.user.email, "test-password-123")).rejects.toThrow("Sign-in failed");
     request.headers = await signInHeaders(owner.user.email, "new-password-456");
     expect((await getHomeProfile()).user.name).toBe("Alex Updated");
@@ -82,8 +83,19 @@ describe("settings actions against in-memory Postgres", { timeout: 60_000 }, () 
     const url = `https://settings-test.public.blob.vercel-storage.com/avatars/${owner.user.id}-photo.png`;
     expect((await updateAvatar({}, form({ url }))).success).toBe(true);
     expect((await getHomeProfile()).user.image).toBe(url);
-    expect((await removeAvatar({})).success).toBe(true);
+    expect((await removeAvatar()).success).toBe(true);
     expect((await getHomeProfile()).user.image).toBeNull();
+  });
+
+  it("keeps account data when Better Auth requires a recent sign-in", async () => {
+    const previousHeaders = request.headers;
+    request.headers = await signInHeaders(other.user.email, "test-password-123");
+    const current = await auth.api.getSession({ headers: request.headers });
+    await db.update(session).set({ createdAt: new Date("2020-01-01T00:00:00Z") }).where(eq(session.id, current!.session.id));
+    const result = await deleteAccount({}, form({ confirmation: "DELETE" }));
+    expect(result).toMatchObject({ success: false, message: expect.stringContaining("sign out and sign in again") });
+    expect((await getHomeProfile()).user.id).toBe(other.user.id);
+    request.headers = previousHeaders;
   });
 
   it("requires DELETE, deletes all home data, revokes the session and leaves other homes intact", async () => {
@@ -115,7 +127,7 @@ describe("settings actions against in-memory Postgres", { timeout: 60_000 }, () 
     for (const action of [updateProfile, updateHome, updateNotifications, changePassword, updateAvatar, deleteAccount]) {
       await expect(action({}, new FormData())).rejects.toThrow("REDIRECT:/?expired=1");
     }
-    await expect(removeAvatar({})).rejects.toThrow("REDIRECT:/?expired=1");
+    await expect(removeAvatar()).rejects.toThrow("REDIRECT:/?expired=1");
   });
 
 });
