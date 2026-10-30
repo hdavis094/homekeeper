@@ -1,6 +1,6 @@
 // Vercel Blob helpers. `uploadFile` runs in the browser (client upload through /api/upload);
-// `deleteBlob` runs on the server (needs BLOB_READ_WRITE_TOKEN).
-import { upload } from "@vercel/blob/client";
+// `deleteBlob` runs on the server (the store's OIDC connection or BLOB_READ_WRITE_TOKEN).
+import { uploadPresigned } from "@vercel/blob/client";
 
 export const UPLOAD_KINDS = ["receipts", "avatars"] as const;
 export type UploadKind = (typeof UPLOAD_KINDS)[number];
@@ -26,7 +26,7 @@ export async function uploadFile(file: File, kind: UploadKind): Promise<{ url: s
     throw new Error(kind === "avatars" ? "Use a JPG, PNG or WebP image" : "Use an image or a PDF");
   }
   const safeName = file.name.replace(/[^\w.\-]+/g, "-").slice(-80) || "file";
-  const blob = await upload(`${kind}/${safeName}`, file, {
+  const blob = await uploadPresigned(`${kind}/${safeName}`, file, {
     access: "public",
     handleUploadUrl: "/api/upload",
     contentType: file.type,

@@ -1,33 +1,32 @@
-import { type HandleUploadBody, handleUpload } from "@vercel/blob/client";
+import { issueSignedToken } from "@vercel/blob";
+import { type HandleUploadPresignedBody, handleUploadPresigned } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { UPLOAD_CONTENT_TYPES, UPLOAD_KINDS, UPLOAD_MAX_BYTES, type UploadKind } from "@/lib/blob";
 
 /**
- * Client-upload token endpoint for `uploadFile()` in lib/blob.ts. Signed-in users only; pathnames must
+ * Presigned client-upload endpoint for `uploadFile()` in lib/blob.ts (works with the store's OIDC
+ * connection, so no BLOB_READ_WRITE_TOKEN is needed). Signed-in users only; pathnames must
  * start with `receipts/` or `avatars/`; images (+ PDF for receipts) up to 10 MB.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
+  const body = (await request.json()) as HandleUploadPresignedBody;
   try {
-    const result = await handleUpload({
+    const result = await handleUploadPresigned({
       body,
       request,
-      onBeforeGenerateToken: async (pathname) => {
+      getSignedToken: async (pathname) => {
         // Token requests come from the browser with the session cookie.
         const session = await auth.api.getSession({ headers: request.headers });
         if (!session) throw new Error("Not signed in");
         const kind = pathname.split("/")[0] as UploadKind;
         if (!UPLOAD_KINDS.includes(kind) || pathname.includes("..")) throw new Error("Invalid upload path");
-        return {
-          allowedContentTypes: UPLOAD_CONTENT_TYPES[kind],
-          maximumSizeInBytes: UPLOAD_MAX_BYTES,
-          addRandomSuffix: true,
-          tokenPayload: JSON.stringify({ userId: session.user.id }),
-        };
+        const limits = { allowedContentTypes: UPLOAD_CONTENT_TYPES[kind], maximumSizeInBytes: UPLOAD_MAX_BYTES };
+        const validUntil = Date.now() + 10 * 60 * 1000;
+        const token = await issueSignedToken({ pathname, operations: ["put"], ...limits, validUntil });
+        return { token, urlOptions: { ...limits, validUntil, addRandomSuffix: true, allowOverwrite: false } };
       },
-      // Called by Vercel Blob (not the browser) after the upload; the URL is saved by a server action.
-      onUploadCompleted: async () => {},
+      // No onUploadCompleted: the URL is saved by a server action when the form is submitted.
     });
     return NextResponse.json(result);
   } catch (error) {
