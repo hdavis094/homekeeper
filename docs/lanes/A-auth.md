@@ -22,8 +22,10 @@
   home) → `/home`.
 - `/forgot-password` (request email via Better Auth `requestPasswordReset`, always show "check your inbox") and
   `/reset-password?token=…` (new password + confirm → `/` with a success notice).
-- `lib/actions/auth.ts`: `signIn`, `signUp`, `requestReset`, `resetPassword`, and **`signOut`** (used by the
-  sidebar; redirects to `/`).
+- `lib/actions/auth.ts`: `signIn`, `signUp`, `requestReset`, `resetPassword`. (Sign-out already lives in
+  `app/(app)/layout.tsx`; don't add another.)
+- Reset flow: call `requestPasswordReset({ email, redirectTo: "/reset-password" })` so the email link lands on
+  `/reset-password?token=…`. `requireSession` redirects stale sessions to `/?expired=1`; show nothing special for it.
 - Mobile (390px): single column, login card under the hero.
 
 ## Wave 2 rules

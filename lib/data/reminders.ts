@@ -16,6 +16,7 @@ export type ReminderRecipient = {
   timeZone: string;
   emailReminders: boolean;
   weeklySummary: boolean;
+  lastWeeklySummaryOn: string | null;
 };
 
 /** Homes with email reminders or the weekly summary turned on, with their user's email and time zone. */
@@ -29,6 +30,7 @@ export async function listReminderRecipients(): Promise<ReminderRecipient[]> {
       timeZone: user.timeZone,
       emailReminders: home.emailReminders,
       weeklySummary: home.weeklySummary,
+      lastWeeklySummaryOn: home.lastWeeklySummaryOn,
     })
     .from(home)
     .innerJoin(user, eq(home.userId, user.id))
@@ -57,6 +59,11 @@ export async function getTasksToRemind(homeId: string, today: string, withinDays
     rows.map((r) => toTaskRow(r, today)),
     today,
   );
+}
+
+/** Records the weekly summary as sent on `sentOn` (the user's local date). */
+export async function markWeeklySummarySent(homeId: string, sentOn: string): Promise<void> {
+  await db.update(home).set({ lastWeeklySummaryOn: sentOn }).where(eq(home.id, homeId));
 }
 
 /** Records reminders as sent for `sentOn`; repeated calls are no-ops. */

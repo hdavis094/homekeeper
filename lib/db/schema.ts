@@ -118,6 +118,8 @@ export const home = pgTable("home", {
   squareFeet: integer("square_feet"),
   emailReminders: boolean("email_reminders").default(true).notNull(),
   weeklySummary: boolean("weekly_summary").default(false).notNull(),
+  /** User-local date the last weekly summary went out; keeps the Monday send idempotent. */
+  lastWeeklySummaryOn: date("last_weekly_summary_on", { mode: "string" }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

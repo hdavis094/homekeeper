@@ -10,6 +10,6 @@ Done in the orchestrator session:
   `test`, `test:watch`, `e2e`, `db:generate`, `db:migrate`, `db:studio`, `db:seed`.
 - `.env.example`, `docs/design/*.png`, `docs/design/tokens.md`, `docs/lanes/*`.
 
-**Waiting on the user:** `npx vercel link`, add Neon + Blob + Resend from the Vercel Marketplace, set
+**Still waiting on the user:** `npx vercel link`, add Neon + Blob + Resend from the Vercel Marketplace, set
 `BETTER_AUTH_SECRET`, `CRON_SECRET`, `EMAIL_FROM` (and a Neon branch URL as `DATABASE_URL_TEST`), then
 `npx vercel env pull .env.local`.

@@ -17,6 +17,9 @@
   days|weeks|months|years), linked item (select), vendor (select), notes. Delete with confirm.
 - Complete modal (`?complete=<id>`): date (default today), cost, vendor, receipt upload (Blob, `receipts/`), notes.
   Completing creates a `logEntry`; recurring tasks move `dueDate` with `nextDueDate`, others get `completedAt`.
+  The Neon HTTP driver has no transactions: write the log entry and the task update together with `db.batch([...])`.
+  The log entry copies the task's `itemId` and `vendorId` (unless overridden); the new due date is
+  `nextDueDate(dueDate, recurrence, completionDate)` from `lib/domain`.
 - Log a Repair modal (`?log=1`): title, date, cost, vendor, item (optional), receipt, notes → log entry with no task.
 - `lib/actions/tasks.ts`: `createTask`, `updateTask`, `deleteTask`, `completeTask`, `logRepair`; zod-validated,
   home-scoped, `revalidatePath` for `/tasks`, `/home`, `/schedule`, `/inventory`, `/vendors`.

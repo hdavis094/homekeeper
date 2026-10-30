@@ -16,7 +16,8 @@
 - `app/api/cron/reminders/route.ts` (`GET`): 401 unless the `Authorization` header equals `Bearer ${CRON_SECRET}`.
   For each home with `emailReminders`: compute "today" in the user's time zone, pick due-soon (≤3 days) and overdue
   open tasks not yet reminded today, send one email per home, then `markReminderSent`. On Mondays (user's time
-  zone) also send the weekly summary to homes with `weeklySummary`. Return JSON counts. Keep it idempotent.
+  zone) also send the weekly summary to homes with `weeklySummary` unless `lastWeeklySummaryOn` already equals
+  that local date; afterwards call `markWeeklySummarySent(homeId, localToday)`. Return JSON counts. Keep it idempotent.
 - Pure selection logic (which tasks to remind, is-it-Monday-there) in `app/api/cron/reminders/select.ts`,
   **test-first** in `test/reminders/`.
 - `vercel.json`: `{"crons":[{"path":"/api/cron/reminders","schedule":"0 13 * * *"}]}` (daily, ~9am Eastern).

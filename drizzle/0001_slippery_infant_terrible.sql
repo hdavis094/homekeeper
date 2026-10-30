@@ -1,0 +1,1 @@
+ALTER TABLE "home" ADD COLUMN "last_weekly_summary_on" date;
