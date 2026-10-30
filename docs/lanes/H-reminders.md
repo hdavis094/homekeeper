@@ -13,7 +13,7 @@
 - `emails/task-reminder.tsx` (tasks due in ≤3 days + overdue, each with due text, "Open HomeKeeper" button to
   `${BETTER_AUTH_URL}/tasks`) and `emails/weekly-summary.tsx` (completed last week + spend, upcoming next 7 days,
   overdue). Styled with the tokens (Inter Tight fallback to system sans, primary `#2563EB`).
-- `app/api/cron/reminders/route.ts` (`GET`): 401 unless `authorization === \`Bearer ${CRON_SECRET}\``.
+- `app/api/cron/reminders/route.ts` (`GET`): 401 unless the `Authorization` header equals `Bearer ${CRON_SECRET}`.
   For each home with `emailReminders`: compute "today" in the user's time zone, pick due-soon (≤3 days) and overdue
   open tasks not yet reminded today, send one email per home, then `markReminderSent`. On Mondays (user's time
   zone) also send the weekly summary to homes with `weeklySummary`. Return JSON counts. Keep it idempotent.
