@@ -18,6 +18,7 @@ export type Db = ReturnType<typeof createNeonDb>;
 function createPgliteDb(url: string): Db {
   // Loaded lazily so production bundles never touch PGlite.
   /* eslint-disable @typescript-eslint/no-require-imports */
+  const fs = require("node:fs") as typeof import("node:fs");
   const { PGlite } = require("@electric-sql/pglite") as typeof import("@electric-sql/pglite");
   const { drizzle: drizzlePglite } = require("drizzle-orm/pglite") as typeof import("drizzle-orm/pglite");
   /* eslint-enable @typescript-eslint/no-require-imports */
@@ -28,6 +29,10 @@ function createPgliteDb(url: string): Db {
     .__pgliteClients ??= new Map());
   let client = target === "memory" ? undefined : clients.get(target);
   if (!client) {
+    if (target !== "memory") {
+      // Ensure directory exists so PGlite doesn't fail on fresh checkouts
+      fs.mkdirSync(target, { recursive: true });
+    }
     client = target === "memory" ? new PGlite() : new PGlite(target);
     if (target !== "memory") clients.set(target, client);
   }
