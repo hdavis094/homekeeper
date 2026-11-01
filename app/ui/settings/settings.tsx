@@ -10,6 +10,7 @@ import { UPLOAD_ACCEPT, UPLOAD_CONTENT_TYPES, UPLOAD_MAX_BYTES, uploadFile } fro
 import type { Profile } from "@/lib/data/home";
 import type { Home } from "@/lib/db/schema";
 import { HOME_TYPES, HOME_TYPE_LABELS, TIME_ZONES } from "@/lib/domain/constants";
+import { ThemeToggle } from "../theme-toggle";
 
 const sections = [
   ["profile", "Profile"],
@@ -110,7 +111,12 @@ function ProfileForm({ user }: { user: Profile }) {
           <Input label="Email" type="email" value={user.email} readOnly autoComplete="email" />
           <Input label="Phone" name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={(e) => setValues((current) => ({ ...current, phone: e.target.value }))} error={state.fieldErrors?.phone} />
           <Select label="Time Zone" name="timeZone" options={zones} value={values.timeZone} onChange={(e) => setValues((current) => ({ ...current, timeZone: e.target.value }))} error={state.fieldErrors?.timeZone} />
+          <div className="bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100">
+            <ThemeToggle/>
+          </div>
         </fieldset>
+        
+        
         <SaveFooter state={state} pending={pending} />
       </form>
     </Card>

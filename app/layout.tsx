@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter_Tight } from "next/font/google";
 import "./ui/globals.css";
+import { ThemeProvider } from "@/app/ui/theme-provider";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
@@ -21,10 +22,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${interTight.variable} ${interTight.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-ink font-sans">
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
